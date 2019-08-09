@@ -1,0 +1,79 @@
+@font-face {
+  font-family: "rawline";
+  src: url(/static/fonts/rawline-400.eot);
+  src: url(/static/fonts/rawline-400.eot?#iefix) format("embedded-opentype"),
+    url(/static/fonts/rawline-400.woff2) format("woff2"),
+    url(/static/fonts/rawline-400.woff) format("woff"),
+    url(/static/fonts/rawline-400.ttf) format("truetype"),
+    url(/static/fonts/rawline-400.svg) format("svg");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  margin:0;
+  padding: 0;
+  color: #1D232A;
+  font: 12px "rawline"
+}
+
+.fullPage {
+  background-image: linear-gradient(-45deg, #f22737, #19216c);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentWrap {
+  text-align: center;
+}
+
+.loginForm {
+  margin: 20px;
+  padding: 30px 50px;
+  background: white;
+  border-radius: 8px;
+  display: grid;
+  grid-row-gap: 10px;
+  text-align: start;
+}
+
+.input {
+  width: 280px;
+  padding: 10px;
+}
+
+.loginRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+}
+
+.login {
+  border: 2px solid;
+  border-radius: 4px;
+  border-color: #ff6315;
+  color: #ff6315;
+  background: white;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 6px 24px;
+}
+
+.login:disabled {
+  border-color: #8d9194;
+  color: #8d9194;
+}
+
+.login:active {
+  color: white;
+  border: 0;
+  padding: 8px 26px;
+  background-image: linear-gradient(to right, #ffbb3c, #f22737)
+}

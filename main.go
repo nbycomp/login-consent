@@ -120,6 +120,9 @@ func main() {
 	mux.Mount("/auth", http.StripPrefix("/auth", login.LoginMiddleware(ab)(ab.Config.Core.Router)))
 	mux.Mount("/consent", login.Consent(ab))
 
+	fs := http.FileServer(http.Dir("static"))
+	mux.Mount("/static/", http.StripPrefix("/static/", fs))
+
 	log.Printf("Listening on localhost: %s", port)
 	log.Println(http.ListenAndServe("localhost:"+port, mux))
 }
