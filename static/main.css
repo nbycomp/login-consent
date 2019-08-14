@@ -1,11 +1,11 @@
 @font-face {
   font-family: "rawline";
-  src: url(/static/fonts/rawline-400.eot);
-  src: url(/static/fonts/rawline-400.eot?#iefix) format("embedded-opentype"),
-    url(/static/fonts/rawline-400.woff2) format("woff2"),
-    url(/static/fonts/rawline-400.woff) format("woff"),
-    url(/static/fonts/rawline-400.ttf) format("truetype"),
-    url(/static/fonts/rawline-400.svg) format("svg");
+  src: url(fonts/rawline-400.eot);
+  src: url(fonts/rawline-400.eot?#iefix) format("embedded-opentype"),
+    url(fonts/rawline-400.woff2) format("woff2"),
+    url(fonts/rawline-400.woff) format("woff"),
+    url(fonts/rawline-400.ttf) format("truetype"),
+    url(fonts/rawline-400.svg) format("svg");
   font-weight: 400;
   font-style: normal;
 }

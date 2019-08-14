@@ -54,13 +54,12 @@ func main() {
 	cStore.Options.Secure = false
 	cStore.MaxAge(int((30 * 24 * time.Hour) / time.Second))
 
-	// replace in-memory storage with something supporting
 	ab.Config.Storage.Server = database
 	ab.Config.Storage.SessionState = sessionStore
 	ab.Config.Storage.CookieState = cookieStore
 
-	// add templates to views directory to override ugly defaults
-	ab.Config.Core.ViewRenderer = abrenderer.NewHTML("/auth", "ab_views")
+	ab.Config.Paths.Mount = "/auth"
+	ab.Config.Core.ViewRenderer = abrenderer.NewHTML(ab.Config.Paths.Mount, "ab_views")
 
 	ab.Config.Modules.RegisterPreserveFields = []string{"email", "name"}
 
@@ -126,14 +125,16 @@ func main() {
 		authboss.ModuleListMiddleware(ab),
 	)
 
-	mux.Mount("/auth", http.StripPrefix("/auth", login.LoginMiddleware(ab)(ab.Config.Core.Router)))
-	mux.Mount("/consent", login.Consent(ab))
+	mux.Route(ab.Config.Paths.Mount, func(mux chi.Router) {
+		mux.Mount("/", http.StripPrefix("/auth", login.LoginMiddleware(ab)(ab.Config.Core.Router)))
+		mux.Mount("/consent", login.Consent(ab))
 
-	fs := http.FileServer(http.Dir("static"))
-	mux.Mount("/static/", http.StripPrefix("/static/", fs))
+		fs := http.FileServer(http.Dir("static"))
+		mux.Mount("/static/", http.StripPrefix(ab.Config.Paths.Mount+"/static/", fs))
+	})
 
-	log.Printf("Listening on localhost: %s", port)
-	log.Println(http.ListenAndServe("localhost:"+port, mux))
+	log.Printf("Listening on port %s", port)
+	log.Println(http.ListenAndServe(":"+port, mux))
 }
 
 func dataInjector(handler http.Handler) http.Handler {

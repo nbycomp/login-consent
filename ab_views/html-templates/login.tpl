@@ -1,6 +1,6 @@
 <div class="fullPage">
     <div class="contentWrap">
-        <img src="/static/logo-neg.png" alt="Nearby Computing logo" />
+        <img src="{{mountpathed "static/logo-neg.png"}}" alt="Nearby Computing logo" />
         <form class="loginForm" action="{{mountpathed "login"}}" method="POST">
             {{with .error}}{{.}}<br />{{end}}
             <input class="input" type="text" class="form-control" name="email" placeholder="E-mail" value="{{.primaryIDValue}}"><br />
