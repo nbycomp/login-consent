@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"time"
@@ -68,7 +69,15 @@ func main() {
 		port = "3000"
 	}
 
-	ab.Config.Paths.RootURL = "http://localhost:" + port
+	rootURL := os.Getenv("ROOT_URL")
+	if rootURL == "" {
+		rootURL = "http://localhost:" + port
+	}
+	_, err := url.Parse(rootURL)
+	if err != nil {
+		panic("invalid root URL passed")
+	}
+	ab.Config.Paths.RootURL = rootURL
 
 	defaults.SetCore(&ab.Config, false, false)
 
