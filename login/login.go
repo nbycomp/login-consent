@@ -54,8 +54,9 @@ func LoginMiddleware(ab *authboss.Authboss) Middleware {
 			remember := r.Context().Value(CTXKeyRemember).(bool)
 
 			body := map[string]interface{}{
-				"subject":  user.GetEmail(),
-				"remember": remember,
+				"subject":      user.GetEmail(),
+				"remember":     remember,
+				"remember_for": 3600,
 			}
 
 			ch := r.Context().Value(CTXKeyChallenge).(string)
