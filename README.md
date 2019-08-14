@@ -8,6 +8,18 @@ The code is based on the [reference implementation](https://github.com/ory/hydra
 
 The user is not prompted to provide consent; it is automatically granted, as this application is designed for first-party clients.
 
+## Configuration
+
+The following can be passed as environment variables:
+
+| Name               | Description                                          | Default |
+| ------------------ | ---------------------------------------------------- | ------- |
+| `COOKIE_STORE_KEY` | a base64-encoded key, used to authenticate cookies   | random auto-generated |
+| `SESSION_STORE_KEY`| a base64-encoded key, used to authenticate sessions  | random auto-generated |
+| `HYDRA_ADMIN_URL`  | e.g. http://hydra:4445                               | _none_ |
+| `PORT`             | the port to listen on                                | 3000   |
+| `ROOT_URL`         | the external scheme, hostname and port of the service, useful when running behind a reverse proxy | `http://localhost:PORT` |
+
 ## Demo with ORY Hydra
 
 ```sh
