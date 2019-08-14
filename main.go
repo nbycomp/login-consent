@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"log"
 	"net/http"
 	"net/url"
@@ -46,9 +47,9 @@ var (
 )
 
 func main() {
-	cookieStore = abclientstate.NewCookieStorer(securecookie.GenerateRandomKey(64), nil)
+	cookieStore = abclientstate.NewCookieStorer(storeKey("COOKIE_STORE_KEY"), nil)
 	cookieStore.Secure = false
-	sessionStore = abclientstate.NewSessionStorer(sessionCookieName, securecookie.GenerateRandomKey(64))
+	sessionStore = abclientstate.NewSessionStorer(sessionCookieName, storeKey("SESSION_STORE_KEY"), nil)
 
 	cStore := sessionStore.Store.(*sessions.CookieStore)
 	cStore.Options.Secure = false
@@ -165,4 +166,21 @@ func layoutData(w http.ResponseWriter, r **http.Request) authboss.HTMLData {
 		"flash_success":     authboss.FlashSuccess(w, *r),
 		"flash_error":       authboss.FlashError(w, *r),
 	}
+}
+
+func storeKey(envKey string) []byte {
+	key := os.Getenv(envKey)
+	if key == "" {
+		log.Printf("generating random 64 byte key (override by setting %s to a base64-encoded string)\n", envKey)
+		return securecookie.GenerateRandomKey(64)
+	}
+
+	decoded, err := base64.StdEncoding.DecodeString(key)
+	if err != nil {
+		log.Fatalf("failed to base64-decode %s", envKey)
+	} else if len(decoded) != 64 {
+		log.Fatalf("%s is the incorrect length, should be 64 bytes", envKey)
+	}
+
+	return decoded
 }
