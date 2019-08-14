@@ -15,6 +15,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -o /app .
 
 FROM scratch
 
-COPY --from=builder /app ./
+COPY ab_views ab_views/
+COPY static static/
+COPY --from=builder /app .
 
 ENTRYPOINT ["./app"]
