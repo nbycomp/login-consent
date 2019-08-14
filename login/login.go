@@ -23,7 +23,7 @@ type getLoginResponse struct {
 
 func getLoginRequest(challenge string) getLoginResponse {
 	var res getLoginResponse
-	url := makeURL("/oauth2/auth/requests/login", "login", challenge)
+	url := makeGetURL(login, challenge)
 	getJSON(url, &res)
 
 	return res
@@ -35,7 +35,7 @@ type acceptLoginResponse struct {
 
 func acceptLoginRequest(challenge string, body map[string]interface{}) acceptLoginResponse {
 	var res acceptLoginResponse
-	url := makeURL("/oauth2/auth/requests/login/accept", "login", challenge)
+	url := makeAcceptURL(login, challenge)
 	putJSON(url, body, &res)
 
 	return res
@@ -70,7 +70,7 @@ func LoginMiddleware(ab *authboss.Authboss) Middleware {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.URL.Path == "/login" {
 				switch r.Method {
-				case "GET":
+				case http.MethodGet:
 					if ch := r.URL.Query().Get("login_challenge"); ch != "" {
 						res := getLoginRequest(ch)
 
@@ -90,7 +90,7 @@ func LoginMiddleware(ab *authboss.Authboss) Middleware {
 						}
 
 					}
-				case "POST":
+				case http.MethodPost:
 					r = r.WithContext(context.WithValue(r.Context(), CTXKeyChallenge, r.FormValue("challenge")))
 
 					var remember bool
