@@ -23,6 +23,7 @@ import (
 	abrenderer "github.com/volatiletech/authboss-renderer"
 	_ "github.com/volatiletech/authboss/auth"
 	"github.com/volatiletech/authboss/defaults"
+	_ "github.com/volatiletech/authboss/logout"
 	_ "github.com/volatiletech/authboss/register"
 	"github.com/volatiletech/authboss/remember"
 )
@@ -61,7 +62,7 @@ func main() {
 
 	ab.Config.Paths.Mount = "/auth"
 	ab.Config.Core.ViewRenderer = abrenderer.NewHTML(ab.Config.Paths.Mount, "ab_views")
-
+	ab.Config.Modules.LogoutMethod = http.MethodGet
 	ab.Config.Modules.RegisterPreserveFields = []string{"email", "name"}
 
 	port := os.Getenv("PORT")
@@ -127,7 +128,8 @@ func main() {
 	)
 
 	mux.Route(ab.Config.Paths.Mount, func(mux chi.Router) {
-		mux.Mount("/", http.StripPrefix("/auth", login.LoginMiddleware(ab)(ab.Config.Core.Router)))
+		mws := chi.Chain(login.LoginMiddleware(ab), login.LogoutMiddleware(ab))
+		mux.Mount("/", http.StripPrefix(ab.Config.Paths.Mount, mws.Handler(ab.Config.Core.Router)))
 		mux.Mount("/consent", login.Consent(ab))
 
 		fs := http.FileServer(http.Dir("static"))
