@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: registry-image
+  source: {repository: concourse/builder-task}
+
+params:
+  REPOSITORY: registry.nearbycomputing.com/nbycomp/core/auth/login-consent
+  CONTEXT: repo
+  DOCKERFILE: repo/ci/Dockerfile
+
+inputs:
+- name: repo
+outputs:
+- name: image
+caches:
+- path: cache
+
+run:
+  path: build
