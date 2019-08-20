@@ -94,7 +94,7 @@ func LoginMiddleware(ab *authboss.Authboss) Middleware {
 					r = r.WithContext(context.WithValue(r.Context(), CTXKeyChallenge, r.FormValue("challenge")))
 
 					var remember bool
-					if s, err := strconv.ParseBool(r.FormValue("rm")); err != nil {
+					if s, err := strconv.ParseBool(r.FormValue("rm")); err == nil {
 						remember = s
 					}
 
