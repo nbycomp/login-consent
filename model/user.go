@@ -15,6 +15,7 @@ type User struct {
 
 	// Non-authboss related field
 	Name string
+	Role string
 
 	// Auth
 	Email    string
