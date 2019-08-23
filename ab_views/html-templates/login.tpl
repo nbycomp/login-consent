@@ -10,7 +10,7 @@
             <div class="loginRow">
                 {{with .modules}}{{with .remember}}
                     <label class="rememberMe">
-                        <input type="checkbox" name="rm" value="true"> Remember Me</input>
+                        <input type="checkbox" name="rm" value="true" checked> Remember Me</input>
                     </label>
                 {{end}}{{end -}}
                 {{with .redir}}<input type="hidden" name="redir" value="{{.}}" />{{end}}
