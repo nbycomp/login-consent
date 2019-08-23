@@ -19,6 +19,7 @@ The following can be passed as environment variables:
 | `HYDRA_ADMIN_URL`  | e.g. http://hydra:4445                               | _none_ |
 | `PORT`             | the port to listen on                                | 3000   |
 | `ROOT_URL`         | the external scheme, hostname and port of the service, useful when running behind a reverse proxy | `http://localhost:PORT` |
+| `IMPORT_USERS`     | the path to a json file from which to import users (see `users.sample.json` for an example) | _none_ |
 
 ## Demo with ORY Hydra
 

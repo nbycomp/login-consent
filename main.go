@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"regexp"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -24,7 +23,6 @@ import (
 	_ "github.com/volatiletech/authboss/auth"
 	"github.com/volatiletech/authboss/defaults"
 	_ "github.com/volatiletech/authboss/logout"
-	_ "github.com/volatiletech/authboss/register"
 	"github.com/volatiletech/authboss/remember"
 )
 
@@ -60,6 +58,11 @@ func main() {
 	ab.Config.Storage.SessionState = sessionStore
 	ab.Config.Storage.CookieState = cookieStore
 
+	if filename := os.Getenv("IMPORT_USERS"); filename != "" {
+		log.Printf("Importing users from file: %s\n", filename)
+		repo.Import(filename, database)
+	}
+
 	ab.Config.Paths.Mount = "/auth"
 	ab.Config.Core.ViewRenderer = abrenderer.NewHTML(ab.Config.Paths.Mount, "ab_views")
 	ab.Config.Modules.LogoutMethod = http.MethodGet
@@ -81,35 +84,6 @@ func main() {
 	ab.Config.Paths.RootURL = rootURL
 
 	defaults.SetCore(&ab.Config, false, false)
-
-	// Here we initialize the bodyreader as something customized in order to accept a name
-	// parameter for our user as well as the standard e-mail and password.
-	//
-	// We also change the validation for these fields
-	// to be something less secure so that we can use test data easier.
-	emailRule := defaults.Rules{
-		FieldName: "email", Required: true,
-		MatchError: "Must be a valid e-mail address",
-		MustMatch:  regexp.MustCompile(`.*@.*\.[a-z]{1,}`),
-	}
-	passwordRule := defaults.Rules{
-		FieldName: "password", Required: true,
-		MinLength: 4,
-	}
-
-	ab.Config.Core.BodyReader = defaults.HTTPBodyReader{
-		Rulesets: map[string][]defaults.Rules{
-			"register":    {emailRule, passwordRule},
-			"recover_end": {passwordRule},
-		},
-		Confirms: map[string][]string{
-			"register":    {"password", authboss.ConfirmPrefix + "password"},
-			"recover_end": {"password", authboss.ConfirmPrefix + "password"},
-		},
-		Whitelist: map[string][]string{
-			"register": []string{"email", "password"},
-		},
-	}
 
 	if err := ab.Init(); err != nil {
 		panic(err)

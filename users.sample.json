@@ -1,0 +1,8 @@
+[
+    {
+        "name": "Rick",
+        "email": "rick@councilofricks.com",
+        "password": "1234",
+        "role": "admin"
+    }
+]

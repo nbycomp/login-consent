@@ -133,6 +133,9 @@ func (u *User) PutArbitrary(values map[string]string) {
 	if n, ok := values["name"]; ok {
 		u.Name = n
 	}
+	if r, ok := values["role"]; ok {
+		u.Role = r
+	}
 }
 
 // GetPID from user
@@ -205,6 +208,7 @@ func (u User) GetOAuth2Expiry() (expiry time.Time) { return u.OAuth2Expiry }
 func (u User) GetArbitrary() map[string]string {
 	return map[string]string{
 		"name": u.Name,
+		"role": u.Role,
 	}
 }
 

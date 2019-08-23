@@ -29,16 +29,7 @@ type MemStorer struct {
 // NewMemStorer constructor
 func NewMemStorer() *MemStorer {
 	return &MemStorer{
-		Users: map[string]model.User{
-			"rick@councilofricks.com": model.User{
-				ID:                 1,
-				Name:               "Rick",
-				Password:           "$2a$10$XtW/BrS5HeYIuOCXYe8DFuInetDMdaarMUJEOg/VA/JAIDgw3l4aG", // pass = 1234
-				Email:              "rick@councilofricks.com",
-				Confirmed:          true,
-				SMSSeedPhoneNumber: "(777)-123-4567",
-			},
-		},
+		Users:  map[string]model.User{},
 		Tokens: make(map[string][]string),
 	}
 }
