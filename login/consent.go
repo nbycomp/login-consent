@@ -34,6 +34,10 @@ func acceptConsentRequest(challenge string, body map[string]interface{}) acceptC
 	return res
 }
 
+type AccessToken struct {
+	Role string `json:"role"`
+}
+
 type IDToken struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
@@ -47,8 +51,12 @@ func Consent(ab *authboss.Authboss) http.Handler {
 		if ch := r.URL.Query().Get("consent_challenge"); ch != "" {
 			getRes := getConsentRequest(ch)
 
+			var accessToken AccessToken
 			var idToken IDToken
 			if user, err := model.GetUser(ab, &r); err == nil {
+				accessToken = AccessToken{
+					Role: user.Role,
+				}
 				idToken = IDToken{
 					Name:  user.Name,
 					Email: user.Email,
@@ -60,7 +68,7 @@ func Consent(ab *authboss.Authboss) http.Handler {
 				"grant_scope":                 getRes.RequestedScope,
 				"grant_access_token_audience": getRes.RequestedAccessTokenAudience,
 				"session": map[string]interface{}{
-					"access_token": struct{}{},
+					"access_token": accessToken,
 					"id_token":     idToken,
 				},
 			}
