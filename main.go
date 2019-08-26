@@ -23,7 +23,6 @@ import (
 	_ "github.com/volatiletech/authboss/auth"
 	"github.com/volatiletech/authboss/defaults"
 	_ "github.com/volatiletech/authboss/logout"
-	"github.com/volatiletech/authboss/remember"
 )
 
 const (
@@ -96,7 +95,6 @@ func main() {
 	mux.Use(logger,
 		nosurf.NewPure,
 		ab.LoadClientStateMiddleware,
-		remember.Middleware(ab),
 		dataInjector,
 		authboss.ModuleListMiddleware(ab),
 	)
