@@ -34,7 +34,7 @@ Start hydra server:
 docker run -it --rm --name login-consent-hydra -p 4444:4444 -p 4445:4445 \
     -e OAUTH2_SHARE_ERROR_DEBUG=1 \
     -e LOG_LEVEL=debug \
-    -e OAUTH2_CONSENT_URL=http://localhost:3000/consent \
+    -e OAUTH2_CONSENT_URL=http://localhost:3000/auth/consent \
     -e OAUTH2_LOGIN_URL=http://localhost:3000/auth/login \
     -e OAUTH2_ISSUER_URL=http://localhost:4444 \
     -e DATABASE_URL=memory \
@@ -57,7 +57,7 @@ docker run --link login-consent-hydra:hydra $hydra clients create \
 
 Run this application:
 ```sh
-HYDRA_ADMIN_URL="http://localhost:4445" PORT=3000 go run .
+HYDRA_ADMIN_URL="http://localhost:4445" PORT=3000 IMPORT_USERS=users.sample.json go run .
 ```
 
 Use Hydra's built in test client `hydra token user` to start the Authorization Code flow:
