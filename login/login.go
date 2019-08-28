@@ -3,17 +3,16 @@ package login
 import (
 	"context"
 	"net/http"
-	"strconv"
+
+	"github.com/volatiletech/authboss"
 
 	"github.com/nbycomp/login/model"
-	"github.com/volatiletech/authboss"
 )
 
 type contextKey string
 
 const (
 	CTXKeyChallenge contextKey = "challenge"
-	CTXKeyRemember  contextKey = "remember"
 )
 
 type getLoginResponse struct {
@@ -51,11 +50,9 @@ func LoginMiddleware(ab *authboss.Authboss) Middleware {
 				return false, err
 			}
 
-			remember := r.Context().Value(CTXKeyRemember).(bool)
-
 			body := map[string]interface{}{
 				"subject":      user.GetEmail(),
-				"remember":     remember,
+				"remember":     true,
 				"remember_for": 3600,
 			}
 
@@ -92,13 +89,6 @@ func LoginMiddleware(ab *authboss.Authboss) Middleware {
 					}
 				case http.MethodPost:
 					r = r.WithContext(context.WithValue(r.Context(), CTXKeyChallenge, r.FormValue("challenge")))
-
-					var remember bool
-					if s, err := strconv.ParseBool(r.FormValue("rm")); err == nil {
-						remember = s
-					}
-
-					r = r.WithContext(context.WithValue(r.Context(), CTXKeyRemember, remember))
 				}
 			}
 
