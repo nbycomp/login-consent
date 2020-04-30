@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/volatiletech/authboss"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type ImportedUser struct {
@@ -36,12 +35,7 @@ func Import(filename string, db authboss.CreatingServerStorer) {
 		user := authboss.MustBeAuthable(db.New(context.Background()))
 
 		user.PutPID(u.Email)
-
-		pass, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-		if err != nil {
-			log.Fatalf("failed to hash password: %v\n", err)
-		}
-		user.PutPassword(string(pass))
+		user.PutPassword(u.Password)
 
 		if arbUser, ok := user.(authboss.ArbitraryUser); ok {
 			arbUser.PutArbitrary(map[string]string{
