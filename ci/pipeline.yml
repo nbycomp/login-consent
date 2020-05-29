@@ -15,7 +15,7 @@ resources:
   - name: pull-request
     type: pull-request
     check_every: 24h
-    webhook_token: ((webhook))
+    webhook_token: ((github_webhook))
     source:
       repository: nbycomp/login-consent
       access_token: ((github_access_key))
