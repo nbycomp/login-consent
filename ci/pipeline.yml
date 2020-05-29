@@ -22,7 +22,8 @@ resources:
 
   - name: login-image
     type: registry-image
-    source: {repository: ((registry))/nbycomp/core/auth/login-consent}
+    source:
+      repository: registry.nearbycomputing.com/nbycomp/core/auth/login-consent
 
   - name: version
     type: semver
@@ -44,7 +45,6 @@ jobs:
       - task: build
         file: repo/ci/build.yml
         privileged: true
-        params: {REPOSITORY: ((registry))/nbycomp/core/auth/login-consent}
       - get: version
         params:
           bump: patch
@@ -69,7 +69,6 @@ jobs:
       - task: build
         file: repo/ci/build.yml
         privileged: true
-        params: {REPOSITORY: ((registry))/nbycomp/core/auth/login-consent}
         on_failure:
           put: pull-request
           params:

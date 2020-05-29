@@ -3,10 +3,10 @@ platform: linux
 
 image_resource:
   type: registry-image
-  source: {repository: concourse/builder-task}
+  source:
+    repository: vito/oci-build-task
 
 params:
-  REPOSITORY: registry.nearbycomputing.com/nbycomp/core/auth/login-consent
   CONTEXT: repo
   DOCKERFILE: repo/ci/Dockerfile
 
