@@ -1,8 +1,8 @@
 resource_types:
-- name: pull-request
-  type: docker-image
-  source:
-    repository: teliaoss/github-pr-resource
+  - name: pull-request
+    type: docker-image
+    source:
+      repository: teliaoss/github-pr-resource
 
 resources:
   - name: repo
@@ -15,14 +15,15 @@ resources:
   - name: pull-request
     type: pull-request
     check_every: 24h
-    webhook_token: ((webhook))
+    webhook_token: ((github_webhook))
     source:
       repository: nbycomp/login-consent
       access_token: ((github_access_key))
 
   - name: login-image
     type: registry-image
-    source: {repository: ((registry))/nbycomp/core/auth/login-consent}
+    source:
+      repository: registry.nearbycomputing.com/nbycomp/core/auth/login-consent
 
   - name: version
     type: semver
@@ -30,7 +31,7 @@ resources:
       driver: s3
       key: login-consent
       access_key_id: ((semver_access_key))
-      secret_access_key:  ((semver_secret_key))
+      secret_access_key: ((semver_secret_key))
       bucket: nbycomp-pkg-vers
       region_name: eu-west-1
 
@@ -44,7 +45,6 @@ jobs:
       - task: build
         file: repo/ci/build.yml
         privileged: true
-        params: {REPOSITORY: ((registry))/nbycomp/core/auth/login-consent}
       - get: version
         params:
           bump: patch
@@ -53,13 +53,12 @@ jobs:
           image: image/image.tar
           additional_tags: version/version
       - put: version
-        params: {file: version/version}
+        params: { file: version/version }
 
   - name: test-pr
     public: true
     plan:
       - get: pull-request
-        name: repo
         trigger: true
         version: every
       - put: pull-request
@@ -67,9 +66,9 @@ jobs:
           path: pull-request
           status: pending
       - task: build
-        file: repo/ci/build.yml
+        file: pull-request/ci/build.yml
+        input_mapping: { repo: pull-request }
         privileged: true
-        params: {REPOSITORY: ((registry))/nbycomp/core/auth/login-consent}
         on_failure:
           put: pull-request
           params:
