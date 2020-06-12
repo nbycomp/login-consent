@@ -11,11 +11,11 @@ params:
   DOCKERFILE: repo/ci/Dockerfile
 
 inputs:
-- name: repo
+  - name: repo
 outputs:
-- name: image
+  - name: image
 caches:
-- path: cache
+  - path: cache
 
 run:
   path: build

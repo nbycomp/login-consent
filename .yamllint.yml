@@ -1,0 +1,10 @@
+---
+
+extends: default
+
+rules:
+  document-start: disable
+  line-length:
+    allow-non-breakable-inline-mappings: true
+  braces:
+    max-spaces-inside: 1
