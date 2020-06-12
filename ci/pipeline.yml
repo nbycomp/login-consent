@@ -54,6 +54,12 @@ jobs:
           additional_tags: version/version
       - put: version
         params: { file: version/version }
+      - put: repo
+        params:
+          repository: repo
+          tag: version/version
+          only_tag: true
+          tag_prefix: v
 
   - name: test-pr
     public: true
