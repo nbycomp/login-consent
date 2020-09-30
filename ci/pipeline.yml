@@ -5,12 +5,27 @@ resource_types:
       repository: teliaoss/github-pr-resource
 
 resources:
+  - name: ci-tasks
+    type: git
+    icon: git
+    source:
+      uri: git@github.com:nbycomp/ci-tasks.git
+      branch: master
+      private_key: ((botnbycomp_private_key))
+
   - name: repo
     type: git
     source:
       uri: git@github.com:nbycomp/login-consent.git
       branch: master
       private_key: ((botnbycomp_private_key))
+  - name: repo-1.0
+    type: git
+    source:
+      uri: git@github.com:nbycomp/login-consent.git
+      private_key: ((botnbycomp_private_key))
+      branch: release/1.0
+      tag_filter: v1.0.*
 
   - name: pull-request
     type: pull-request
@@ -24,6 +39,11 @@ resources:
     type: registry-image
     source:
       repository: registry.nearbycomputing.com/nbycomp/core/auth/login-consent
+  - name: login-image-1.0
+    type: registry-image
+    source:
+      repository: registry.nearbycomputing.com/nbycomp/core/auth/login-consent
+      tag: 1.0
 
   - name: version
     type: semver
@@ -42,8 +62,9 @@ jobs:
     plan:
       - get: repo
         trigger: true
+      - get: ci-tasks
       - task: build
-        file: repo/ci/build.yml
+        file: ci-tasks/build.yml
         privileged: true
       - get: version
         params:
@@ -71,8 +92,9 @@ jobs:
         params:
           path: pull-request
           status: pending
+      - get: ci-tasks
       - task: build
-        file: pull-request/ci/build.yml
+        file: ci-tasks/build.yml
         input_mapping: { repo: pull-request }
         privileged: true
         on_failure:
@@ -84,3 +106,21 @@ jobs:
         params:
           path: pull-request
           status: success
+
+  - name: build-1.0
+    public: true
+    serial: true
+    plan:
+      - get: repo
+        resource: repo-1.0
+        trigger: true
+      - get: ci-tasks
+      - task: build
+        file: ci-tasks/build.yml
+        privileged: true
+      - task: strip-v-prefix
+        file: ci-tasks/strip-v-prefix.yml
+      - put: login-image-1.0
+        params:
+          image: image/image.tar
+          additional_tags: tag/tag
