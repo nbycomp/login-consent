@@ -5,6 +5,14 @@ resource_types:
       repository: teliaoss/github-pr-resource
 
 resources:
+  - name: ci-tasks
+    type: git
+    icon: git
+    source:
+      uri: git@github.com:nbycomp/ci-tasks.git
+      branch: master
+      private_key: ((botnbycomp_private_key))
+
   - name: repo
     type: git
     source:
@@ -42,8 +50,9 @@ jobs:
     plan:
       - get: repo
         trigger: true
+      - get: ci-tasks
       - task: build
-        file: repo/ci/build.yml
+        file: ci-tasks/build.yml
         privileged: true
       - get: version
         params:
@@ -71,8 +80,9 @@ jobs:
         params:
           path: pull-request
           status: pending
+      - get: ci-tasks
       - task: build
-        file: pull-request/ci/build.yml
+        file: ci-tasks/build.yml
         input_mapping: { repo: pull-request }
         privileged: true
         on_failure:
