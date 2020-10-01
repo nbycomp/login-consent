@@ -43,7 +43,7 @@ resources:
     type: registry-image
     source:
       repository: registry.nearbycomputing.com/nbycomp/core/auth/login-consent
-      tag: 1.0
+      tag: "1.0"
 
   - name: version
     type: semver
