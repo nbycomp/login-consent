@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/nbycomp/login/model"
+	"github.com/nbycomp/login-consent/model"
 	"github.com/pkg/errors"
 	"github.com/volatiletech/authboss"
 	aboauth "github.com/volatiletech/authboss/oauth2"
