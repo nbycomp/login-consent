@@ -6,7 +6,7 @@ import (
 
 	"github.com/volatiletech/authboss"
 
-	"github.com/nbycomp/login/model"
+	"github.com/nbycomp/login-consent/model"
 )
 
 type contextKey string

@@ -1,4 +1,4 @@
-module github.com/nbycomp/login
+module github.com/nbycomp/login-consent
 
 require (
 	github.com/davecgh/go-spew v1.1.1
@@ -12,6 +12,8 @@ require (
 	github.com/volatiletech/authboss v2.3.0+incompatible
 	github.com/volatiletech/authboss-clientstate v0.0.0-20190330222254-a25680a62c98
 	github.com/volatiletech/authboss-renderer v0.0.0-20181105062701-4b64de40529a
-	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
+	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45 // indirect
 )
+
+go 1.13

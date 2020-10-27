@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
-	"github.com/nbycomp/login/model"
+	"github.com/nbycomp/login-consent/model"
 	"github.com/volatiletech/authboss"
 )
 
