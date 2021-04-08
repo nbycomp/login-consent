@@ -1,3 +1,9 @@
+# Archived
+
+This repo is no longer in use.
+
+---
+
 # Login/consent app
 
 An application implementing the Login and Consent endpoints required by the OAuth2 Authorization Code flow.
